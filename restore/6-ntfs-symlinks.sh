@@ -106,7 +106,7 @@ find . -type l -print0 | while IFS= read -r -d '' link; do
 done
 
 if [[ ! -f "$FILE_RM" ]]; then
-  echo "No symlinks found, no action is needed."
+  echo "No symlinks or junctions found. Workaround isn't required, skip this step :)"
   rm -rf "$DEST_BASE_DIR"
 elif [[ "$(<"$FILE_MISSING" wc -l)" == "1" ]]; then
   # No missing files (only header)

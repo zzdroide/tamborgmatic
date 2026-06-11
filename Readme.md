@@ -214,7 +214,7 @@ Double-check the device you are about to write to!
         ```
         This assumes backup uid matches restore uid.
     - See "List CACHEDIR.TAG files for reference" in previous step.
-    - NTFS symlinks and junctions are not being correctly restored from Linux at this time. Workaround:
+    - For NTFS, hardlinks are successfully restored, but symlinks and junctions are not being correctly restored from Linux at this time. Workaround:
       - Mount the archive
       - ```
         6-ntfs-symlinks.sh <folder_junctions|folder_symlinks> /mnt/borg/NTFS_PART /media/user/NTFS_PART
