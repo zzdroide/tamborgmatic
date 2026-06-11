@@ -69,7 +69,7 @@ find . -type l -print0 | while IFS= read -r -d '' link; do
     is_absolute=true
   fi
 
-  if [[ "$is_absolute" == true ]]; then
+  if [[ "$is_absolute" == "true" ]]; then
     if [[ "$target" == "$ABS_PREFIX"* ]]; then
       # It's an absolute link within the expected prefix, remove the prefix
       target="${target#"$ABS_PREFIX"}"
@@ -81,8 +81,7 @@ find . -type l -print0 | while IFS= read -r -d '' link; do
 
   # Check if the target exists (relative to the link's directory or absolute)
   # Since we are in SRC_DIR, we need to check relative to the link's parent
-  link_dir=$(dirname "$link")
-  if [[ "$is_absolute" == true ]]; then
+  if [[ "$is_absolute" == "true" ]]; then
     full_target_path="$SRC_DIR/$target"
   else
     full_target_path="$SRC_DIR/$link_dir/$target"
