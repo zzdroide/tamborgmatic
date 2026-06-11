@@ -84,6 +84,7 @@ find . -type l -print0 | while IFS= read -r -d '' link; do
   if [[ "$is_absolute" == "true" ]]; then
     full_target_path="$SRC_DIR/$target"
   else
+    link_dir=$(dirname "$link")
     full_target_path="$SRC_DIR/$link_dir/$target"
   fi
 
