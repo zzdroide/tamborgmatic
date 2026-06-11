@@ -231,7 +231,15 @@ Double-check the device you are about to write to!
 ## Setup
 
 0. Requirements:
-    - Debian / Linux Mint / Ubuntu 20.04+, **installed on LVM**
+    - Debian / Linux Mint / Ubuntu 20.04+, **installed on LVM:**
+      ```sh
+      sudo pvcreate /dev/sdXY
+      sudo vgcreate machine_name /dev/sdXY
+      # Get available space in VG in GiB:
+      sudo vgs --noheadings -o vg_size /dev/machine_name
+      # Remember to leave some space in VG for snapshots:
+      sudo lvcreate --size 100G --name root machine_name
+      ```
     - Encrypted filesystems are currently unsupported
     - sudo [NOPASSWD](https://xkcd.com/1200/)
 
