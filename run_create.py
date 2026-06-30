@@ -46,10 +46,13 @@ def inhibit_suspend():
     Alternative: https://wakepy.readthedocs.io
     """
 
-    is_running_gui = subprocess.run(
-        ("systemctl", "--quiet", "is-active", "display-manager"),
-        check=False,
-    ).returncode == 0
+    try:
+        is_running_gui = subprocess.run(
+            ("systemctl", "--quiet", "is-active", "display-manager"),
+            check=False,
+        ).returncode == 0
+    except FileNotFoundError:   # No systemd
+        return                  # Don't care (antiX Linux)
 
     if is_running_gui:
         bus = dbus.SessionBus()

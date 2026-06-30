@@ -231,7 +231,7 @@ Double-check the device you are about to write to!
 ## Setup
 
 0. Requirements:
-    - Debian / Linux Mint / Ubuntu 20.04+, **installed on LVM:**
+    - Debian / Linux Mint / Ubuntu 20.04+ / antiX Linux, **installed on LVM:**
       ```sh
       sudo pvcreate /dev/sdXY
       sudo vgcreate machine_name /dev/sdXY
@@ -293,7 +293,7 @@ Double-check the device you are about to write to!
       ```
 
 
-1. Configure `server_user` on server.
+1. Configure `server_user` on server, and run `./update_authorized_keys.sh` there.
 
 
 ### Forget old host keys when server is reinstalled

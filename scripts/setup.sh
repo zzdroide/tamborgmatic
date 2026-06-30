@@ -20,7 +20,6 @@ install_packages() {
 
   local common_packages; common_packages="\
     curl \
-    hpnssh-client \
     wakeonlan \
     smartmontools \
     jq \
@@ -34,19 +33,28 @@ install_packages() {
   if (( is_ubuntu )); then
     sudo add-apt-repository -y ppa:rapier1/hpnssh
     sudo add-apt-repository -y ppa:costamagnagianfranco/borgbackup
-    extra_packages="borgbackup"
+    extra_packages="borgbackup hpnssh-client"
   else
-    manually_add_ppa_to_debian rapier1/hpnssh
-    # Doesn't work:
-    # manually_add_ppa_to_debian costamagnagianfranco/borgbackup
-
+    # Doesn't work: `manually_add_ppa_to_debian costamagnagianfranco/borgbackup`
     # To build Borg  https://borgbackup.readthedocs.io/en/stable/installation.html#debian-ubuntu
     extra_packages="python3 python3-dev python3-pip python3-virtualenv libacl1-dev libssl-dev liblz4-dev libzstd-dev libxxhash-dev build-essential pkg-config libfuse3-dev fuse3"
+
+    if is_32bit; then  # antiX Linux
+      # PPA has no i386 packages; hpnssh is built from source in install_hpnssh_from_source
+      extra_packages="$extra_packages autoconf automake libtool zlib1g-dev git"
+    else
+      manually_add_ppa_to_debian rapier1/hpnssh
+      extra_packages="$extra_packages hpnssh-client"
+    fi
   fi
 
   sudo apt update
   # shellcheck disable=SC2086
   sudo apt install -y $common_packages $extra_packages
+
+  if (( ! is_ubuntu )) && is_32bit; then
+    install_hpnssh_from_source
+  fi
 
   local set_pix_global_vars="PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin"
 
@@ -58,6 +66,32 @@ install_packages() {
   # shellcheck disable=SC2086
   (( is_ubuntu )) || sudo $set_pix_global_vars pipx install "borgbackup~=1.4"
   true
+}
+
+is_32bit() {
+  [[ "$(dpkg --print-architecture)" == i386 ]]
+}
+
+install_hpnssh_from_source() {
+  # https://github.com/rapier1/hpn-ssh/tree/hpn-18.9.0#building-from-git
+
+  command -v hpnssh >/dev/null && return 0
+
+  local hpn_version=e2dfa0cea55d93747f4c68b4a2b134d6fbe0db06  # hpn-18.9.0
+  local tmpdir; tmpdir=$(mktemp --directory --tmpdir hpn-ssh.XXXX)
+  pushd "$tmpdir" >/dev/null
+
+  git init
+  git remote add origin https://github.com/rapier1/hpn-ssh
+  git fetch --depth 1 origin "$hpn_version"
+  git checkout FETCH_HEAD
+  autoreconf
+  ./configure
+  make -j"$(nproc)" hpnssh
+  sudo install -m 0755 hpnssh /usr/local/bin/hpnssh
+
+  popd >/dev/null
+  rm -rf "$tmpdir"
 }
 
 manually_add_ppa_to_debian () {
@@ -137,7 +171,9 @@ download_yq() {
   local path="/etc/borgmatic/.bin"   # Not the nicest place though
   sudo mkdir -p "$path"
 
-  local platform; platform="linux_$(dpkg --print-architecture)"
+  local arch; arch=$(dpkg --print-architecture)
+  case "$arch" in i386) arch=386 ;; esac  # yq uses linux_386, not linux_i386
+  local platform="linux_$arch"
   curl -fsSL "https://github.com/mikefarah/yq/releases/latest/download/yq_$platform.tar.gz" |
     sudo tar xz -C $path "./yq_$platform"
   sudo mv "$path/yq_$platform" "$path/yq"
