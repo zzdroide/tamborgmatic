@@ -236,7 +236,7 @@ Double-check the device you are about to write to!
       sudo pvcreate /dev/sdXY
       sudo vgcreate machine_name /dev/sdXY
       # Get available space in VG in GiB:
-      sudo vgs --noheadings -o vg_size /dev/machine_name
+      sudo vgs
       # Remember to leave some space in VG for snapshots:
       sudo lvcreate --size 100G --name root machine_name
       ```
