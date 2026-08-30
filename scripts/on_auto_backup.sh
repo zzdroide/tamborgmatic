@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-# This script runs every time the computer wakes up.
+# This script runs every time the computer wakes up (and also when borg server invokes it via ssh).
 # Maybe the user waked up the computer to use it, and this script should just exit.
 # Or maybe tamborg server sent us a WOL to backup now. Check for that.
 # (Or maybe tamborg server ran 'sudo systemctl start tamborgmatic-auto.service';
