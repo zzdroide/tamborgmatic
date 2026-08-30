@@ -247,7 +247,7 @@ Double-check the device you are about to write to!
 
 1. Clone this:
     ```sh
-    sudo apt install git
+    sudo apt install -y git
 
     sudo SSH_AUTH_SOCK="$SSH_AUTH_SOCK" GIT_SSH_COMMAND="sudo -u $USER ssh" git clone git@github.com:zzdroide/tamborgmatic.git /etc/borgmatic
     # For machine with no write access: sudo git clone https://github.com/zzdroide/tamborgmatic /etc/borgmatic
