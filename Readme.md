@@ -20,6 +20,23 @@ This is what I use to backup my computers and servers. Unlike the traditional Bo
 borgmatic ...
 ```
 
+> For the `encryption_passphrase: ${BORG_PASSPHRASE}` option:
+>
+> ```
+> me$ ssh laptop
+>
+> laptop$ screen  # or tmux
+>
+> laptop$  BORG_PASSPHRASE=pass /etc/borgmatic/run_create.py
+> # Or for full maintenance:  sudo apt update && DEBIAN_FRONTEND=noninteractive sudo apt upgrade -y && BORG_PASSPHRASE=pass /etc/borgmatic/run_create.py; sudo systemctl suspend
+>
+> <Ctrl a><d>
+>
+> # Then, open a terminal in the laptop itself and:
+>
+> laptop$ screen -r
+> ```
+
 
 
 ## Mounting archives
@@ -280,6 +297,7 @@ Double-check the device you are about to write to!
     ```sh
     /etc/borgmatic/scripts/setup.sh
     ```
+    > Or: ` BORG_PASSPHRASE=pass /etc/borgmatic/scripts/setup.sh`
 
 1. (Optional) If you want automatic backups triggered by the server:
 
