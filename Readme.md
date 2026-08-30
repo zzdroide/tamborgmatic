@@ -284,9 +284,11 @@ Double-check the device you are about to write to!
 1. (Optional) If you want automatic backups triggered by the server:
 
     - Install and enable openssh-server. It's recommended to configure `PasswordAuthentication no`
+
     - ```sh
       scripts/install_tamborgmatic_auto.sh
       ```
+
     - Add the following line to `~/.ssh/authorized_keys`
       ```
       command="sudo systemctl start tamborgmatic-auto.service",restrict ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAA... tamborgcont
