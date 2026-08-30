@@ -80,5 +80,5 @@ else  # Headless
     trap 'ssh-agent -k' EXIT
   fi
 
-  exec /etc/borgmatic/run_create.py
+  /etc/borgmatic/run_create.py
 fi
