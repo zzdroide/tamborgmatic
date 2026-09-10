@@ -207,8 +207,8 @@ Double-check the device you are about to write to!
 
     - List CACHEDIR.TAG files for reference:
         ```sh
-        find . -name "CACHEDIR.TAG" -exec sh -c \
-          '[ "$(head -c 43 "$1" 2>/dev/null)" = "Signature: 8a477f597d28d172789f06886806bc55" ] && echo "$1"' \
+        sudo find . -name "CACHEDIR.TAG" -exec sh -c \
+          '[ "$(head -c 43 "$1")" = "Signature: 8a477f597d28d172789f06886806bc55" ] && echo "$1"' \
           _ {} \;
         ```
 
