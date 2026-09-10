@@ -357,6 +357,23 @@ If the restored partition can't be mounted (Disk Manager shows it as healthy, bu
 
 If for some unknown reason the partition type is not correct (happened to me once), change it with `sudo fdisk /dev/sdX`, command `t`.
 
+### BIOS freaks out after moving/resizing partitions
+
+> For example: AHCI BIOS hangs detecting a specific SATA hard drive.
+
+Are MBR CHS addresses bad?
+
+```sh
+for off in       0x1cf 0x1df 0x1ef; do sudo xxd -s$((off)) -l3 /dev/sdX; done
+for off in 0x1c3 0x1d3 0x1e3 0x1f3; do sudo xxd -s$((off)) -l3 /dev/sdX; done
+```
+
+These should usually be `feff ff`/`0000 00`, unless the first partition is smaller than 8 GB. If there are suspicious numbers, backup them and overwrite with:
+
+```sh
+printf '\xfe\xff\xff' | sudo dd of=/dev/sdX bs=1 seek=$((0x1c3))
+```
+
 ### NTFS boots to blinking cursor (after resizing/moving/messing with partitions)
 
 <details>
