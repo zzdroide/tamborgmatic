@@ -386,16 +386,12 @@ and [partclone.ntfsfixboot](https://man.archlinux.org/man/partclone.ntfsfixboot.
 (at least its source code [links](https://thestarman.pcministry.com/asm/mbr/NTFSBR.htm) to way too much detail).
 
 - `jaclaz` explains
-    [here](https://reboot.pro/index.php?showtopic=8233#post_id_70088)
-    ([local copy](readme_data/xpboot/jaclaz.html#post_id_70088))
+    [here](https://web.archive.org/web/20120822043915/http://reboot.pro/8233/#entry70088)
     where the problem is (note that he made a typo and wrote 0x0A,0x0C instead of 0x1A,0x1C),
 
 - but I couldn't fix it with Testdisk
     [1](https://web.archive.org/web/20131005134310/http://www.xtralogic.com/support.shtml#faq_vhdu_disk_read_error)
-    [2](https://web.archive.org/web/20131226114035/http://www.xtralogic.com/testdisk_rebuild_bootsector.shtml)
-    (local
-    [1](readme_data/xpboot/testdisk1.shtml#faq_vhdu_disk_read_error)
-    [2](readme_data/xpboot/testdisk2.shtml)),
+    [2](https://web.archive.org/web/20131226114035/http://www.xtralogic.com/testdisk_rebuild_bootsector.shtml),
 
 - nor by booting the XP disk, going into the recovery console, and running `fixmbr`, `fixboot`, `bootcfg /rebuild`,
 
@@ -417,7 +413,7 @@ What did work for me, was to let Windows setup generate the correct numbers, and
 
 5. Compare the PBRs of the partitions, and change the relevant bytes (0x18-0x1F) in the unbootable one. Serial number for example (0x48-0x4F) is irrelevant, and MFT clusters (0x30-0x3F) should not be changed.
 
-    ![screenshot](readme_data/xpboot/pbr_mod.png)
+    ![screenshot](.readme_images/xpboot_pbr_mod.png)
 
 6. Overwrite the recently written Windows MBR on disk with the previous backed up MBR, to restore booting to GRUB.
 </details>

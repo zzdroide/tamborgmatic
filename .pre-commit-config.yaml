@@ -18,5 +18,3 @@ repos:
   rev: v0.12.3
   hooks:
     - id: ruff-check
-
-exclude: ^readme_data/.*
