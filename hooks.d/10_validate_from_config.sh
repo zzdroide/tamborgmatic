@@ -3,6 +3,16 @@ set -euo pipefail
 source helpers/common.py
 
 validate() {
+  if [[ ${bupsrc[path]} == /dev/disk/by-id/* ]]; then
+    local part; part=$(basename "${bupsrc[devpart]}")
+    if [[ -e "/sys/class/block/$part/partition" ]]; then
+      return  # Valid
+    else
+      echo "Error: ${bupsrc[name]}'s path is not an existing partition: ${bupsrc[path]}"
+      exit 1
+    fi
+  fi
+
   if ! echo "${bupsrc[path]}" | grep -Eq "^/dev/disk/by-.*uuid/"; then
     echo "Error: ${bupsrc[name]}'s path is not specified with /dev/disk/by-*uuid/: ${bupsrc[path]}"
     exit 1
